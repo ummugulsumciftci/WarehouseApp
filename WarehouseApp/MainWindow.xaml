@@ -7,6 +7,18 @@
         <TabItem Header="Stock Search">
             <views:StockSearchView/>
         </TabItem>
+        <TabItem Header="Branches">
+            <views:BranchManagementView/>
+        </TabItem>
+        <TabItem Header="Products">
+            <views:ProductManagementView/>
+        </TabItem>
+        <TabItem Header="Suppliers">
+            <views:SupplierManagementView/>
+        </TabItem>
+        <TabItem Header="Transfers">
+            <views:TransferRequestView/>
+        </TabItem>
         <!-- Next functionalities will be added here as new TabItems -->
     </TabControl>
 </Window>
