@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="WarehouseApp.Views.ShipmentTrackingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Filter -->
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="Shipments" FontWeight="Bold" FontSize="14"
+                       VerticalAlignment="Center" Margin="0,0,20,0"/>
+            <TextBlock Text="Status:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+            <ComboBox x:Name="cmbStatus" Width="140" SelectionChanged="CmbStatus_SelectionChanged">
+                <ComboBoxItem Content="All" IsSelected="True"/>
+                <ComboBoxItem Content="Prepared"/>
+                <ComboBoxItem Content="In Transit"/>
+                <ComboBoxItem Content="Delivered"/>
+                <ComboBoxItem Content="Cancelled"/>
+            </ComboBox>
+            <Button Content="Refresh" Padding="8,3" Margin="10,0,0,0" Click="BtnRefresh_Click"/>
+        </StackPanel>
+
+        <!-- Actions -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,8">
+            <Button Content="Mark In Transit" Padding="8,3" Margin="0,0,8,0" Click="BtnInTransit_Click"/>
+            <Button Content="Mark Delivered"  Padding="8,3" Margin="0,0,8,0" Click="BtnDelivered_Click"/>
+            <Button Content="Cancel Shipment" Padding="8,3" Margin="0,0,25,0" Click="BtnCancel_Click"/>
+            <Button Content="Delete Cancelled Records" Padding="8,3" Foreground="DarkRed"
+                    Click="BtnDeleteCancelled_Click"/>
+        </StackPanel>
+
+        <!-- List -->
+        <DataGrid x:Name="dgShipments" Grid.Row="2" AutoGenerateColumns="False"
+                  IsReadOnly="True" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Shipment ID" Binding="{Binding SHIPMENT_ID}" Width="85"/>
+                <DataGridTextColumn Header="Request ID"  Binding="{Binding REQUEST_ID}" Width="75"/>
+                <DataGridTextColumn Header="Source"      Binding="{Binding SOURCE_NAME}" Width="*"/>
+                <DataGridTextColumn Header="Destination" Binding="{Binding DEST_NAME}" Width="*"/>
+                <DataGridTextColumn Header="Product"     Binding="{Binding PRODUCT_NAME}" Width="*"/>
+                <DataGridTextColumn Header="Quantity"    Binding="{Binding QUANTITY}" Width="65"/>
+                <DataGridTextColumn Header="Status"      Binding="{Binding STATUS}" Width="85"/>
+                <DataGridTextColumn Header="Shipped"
+                                    Binding="{Binding SHIPPED_DATE, StringFormat=dd.MM.yyyy HH:mm}" Width="120"/>
+                <DataGridTextColumn Header="Delivered"
+                                    Binding="{Binding DELIVERED_DATE, StringFormat=dd.MM.yyyy HH:mm}" Width="120"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

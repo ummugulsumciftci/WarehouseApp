@@ -31,8 +31,10 @@ public partial class TransferRequestView : UserControl
         }
     }
 
-    // When the source branch changes, list only the products that branch has in stock
-    private void CmbSource_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void CmbSource_SelectionChanged(object sender, SelectionChangedEventArgs e) => LoadSourceProducts();
+
+    // Lists only the products the selected source branch has in stock
+    private void LoadSourceProducts()
     {
         cmbProduct.ItemsSource = null;
         txtAvailable.Text = "";
@@ -88,9 +90,9 @@ public partial class TransferRequestView : UserControl
         }
     }
 
+    // ---------- Functionality 3: create request ----------
     private void BtnCreate_Click(object sender, RoutedEventArgs e)
     {
-        // ---- Validation ----
         if (cmbSource.SelectedValue == null || cmbDest.SelectedValue == null)
         {
             MessageBox.Show("Please select both source and destination branches.");
@@ -150,6 +152,46 @@ public partial class TransferRequestView : UserControl
         {
             MessageBox.Show("Could not create request: " + ex.Message);
         }
+    }
+
+    // ---------- Functionality 4: atomic transfer ----------
+    private void BtnExecute_Click(object sender, RoutedEventArgs e)
+    {
+        if (dgRequests.SelectedItem is not DataRowView row)
+        {
+            MessageBox.Show("Please select a request from the list.");
+            return;
+        }
+        if (row["STATUS"].ToString() != "Pending")
+        {
+            MessageBox.Show("Only pending requests can be executed.");
+            return;
+        }
+
+        int requestId = Convert.ToInt32(row["REQUEST_ID"]);
+        var answer = MessageBox.Show(
+            $"Execute transfer #{requestId}?\n\n{row["QUANTITY"]} x {row["PRODUCT_NAME"]}\n" +
+            $"{row["SOURCE_NAME"]}  →  {row["DEST_NAME"]}",
+            "Confirm Transfer", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        if (answer != MessageBoxResult.Yes) return;
+
+        try
+        {
+            int shipmentId = TransferService.ExecuteTransfer(requestId, chkSimulateError.IsChecked == true);
+
+            MessageBox.Show(
+                $"Transfer completed successfully (COMMIT).\nShipment #{shipmentId} was created with status 'Prepared'.",
+                "Transfer Completed", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                "Transfer failed. All changes were rolled back (ROLLBACK).\n\nReason: " + ex.Message,
+                "Transfer Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        LoadRequests();
+        LoadSourceProducts(); // refresh the "available" numbers
     }
 
     // UPDATE: a pending request can be rejected

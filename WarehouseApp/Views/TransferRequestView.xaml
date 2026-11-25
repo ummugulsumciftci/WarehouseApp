@@ -52,8 +52,12 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,10,0,5">
             <TextBlock Text="Transfer Requests" FontWeight="Bold" FontSize="14"
                        VerticalAlignment="Center" Margin="0,0,20,0"/>
+            <Button Content="Execute Transfer" Padding="8,3" Margin="0,0,8,0"
+                    FontWeight="Bold" Click="BtnExecute_Click"/>
             <Button Content="Reject Selected" Padding="8,3" Margin="0,0,8,0" Click="BtnReject_Click"/>
-            <Button Content="Refresh" Padding="8,3" Click="BtnRefresh_Click"/>
+            <Button Content="Refresh" Padding="8,3" Margin="0,0,20,0" Click="BtnRefresh_Click"/>
+            <CheckBox x:Name="chkSimulateError" Content="Simulate error (rollback demo)"
+                      VerticalAlignment="Center" Foreground="DarkRed"/>
         </StackPanel>
 
         <!-- Bottom: request list -->

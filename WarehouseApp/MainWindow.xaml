@@ -19,6 +19,8 @@
         <TabItem Header="Transfers">
             <views:TransferRequestView/>
         </TabItem>
-        <!-- Next functionalities will be added here as new TabItems -->
+        <TabItem Header="Shipments">
+            <views:ShipmentTrackingView/>
+        </TabItem>
     </TabControl>
 </Window>
